@@ -1,21 +1,65 @@
-version: '3'
-
+version: "3.9"
+name: jeux-collectionne-symfony
 services:
-###> doctrine/doctrine-bundle ###
-  database:
-    image: postgres:${POSTGRES_VERSION:-15}-alpine
+
+  # Nom du serveur
+  jeux_collectionne:
+    image: mysql:8.0.29
+    restart: "no"
+    env_file: ./.env
+    container_name: jeux_collectionne_db
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-app}
-      # You should definitely change the password in production
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
-      POSTGRES_USER: ${POSTGRES_USER:-app}
+      - MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD
+      - MYSQL_DATABASE=$DATABASE_NAME
+    ports:
+      - $DB_LOCAL_PORT:$DB_DOCKER_PORT
+    networks:
+      - symfony_app
     volumes:
-      - database_data:/var/lib/postgresql/data:rw
-      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-      # - ./docker/db/data:/var/lib/postgresql/data:rw
-###< doctrine/doctrine-bundle ###
+      - vol_mysql:/var/lib/mysql
+
+
+  myapp:
+    depends_on:
+      - jeux_collectionne
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - symfony_app
+    ports:
+      - "8090:80"
+    restart: "no"
+    volumes:
+      - .:/var/www/html
+
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: "no"
+    ports:
+      - 8080:80
+    environment:
+      # Nom du serveur, donc le nom du conteneur mysql
+      - PMA_HOST=jeux_collectionne
+    networks:
+      - symfony_app
 
 volumes:
-###> doctrine/doctrine-bundle ###
-  database_data:
-###< doctrine/doctrine-bundle ###
+  vol_mysql:
+
+networks:
+  symfony_app:
+    driver: bridge
+
+# Commandes à passer:
+#   à la racine du projet:
+#     docker-compose up -d
+#   dans le terminal du conteneur "myapp" (à passer qu'une seule fois, à l'initialisation):
+#     composer install
+#     php bin/console make:migration
+#     php bin/console doctrine:migrations:migrate
+
+# Après ça, ça devrait être bon. A moins que vous ayez changé les ports
+#   , le projet se trouve à: http://localhost:8090
+#   , et phpMyAdmin à: http://localhost:8080 | L'utilisateur et le mot de passe par défaut sont root et 123456 
