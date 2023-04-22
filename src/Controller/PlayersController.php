@@ -18,7 +18,9 @@ class PlayersController extends AbstractController
     public function index(): JsonResponse
     {
         $players = $this->playersBusiness->getPlayers();
-        return $this->json($players);
+        return $this->json($players, 200, [], [
+            'groups' => 'public'
+        ]);
     }
 
     #[Route('/{id}', name: 'app_player', methods:'GET')]
@@ -27,6 +29,8 @@ class PlayersController extends AbstractController
     ): JsonResponse
     {
         $player = $this->playersBusiness->getPlayer($id);
-        return $this->json($player);
+        return $this->json($player, 200, [], [
+            'groups' => 'public'
+        ]);
     }
 }

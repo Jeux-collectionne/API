@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\PlayersRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PlayersRepository::class)]
 class Players
@@ -12,23 +13,30 @@ class Players
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['public', 'private'])]
     private ?int $id = null;
 
+    #[Groups(['public', 'private'])]
     #[ORM\Column(length: 255)]
     private ?string $lastName = null;
 
+    #[Groups(['public', 'private'])]
     #[ORM\Column(length: 255)]
     private ?string $firstName = null;
 
+    #[Groups(['public', 'private'])]
     #[ORM\Column(nullable: true)]
     private ?int $age = null;
 
+    #[Groups(['public', 'private'])]
     #[ORM\Column(length: 255)]
     private ?string $mail = null;
 
+    #[Groups(['private'])]
     #[ORM\Column(length: 255)]
     private ?string $password = null;
 
+    #[Groups(['public', 'private'])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
