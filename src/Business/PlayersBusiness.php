@@ -18,6 +18,11 @@ class PlayersBusiness {
         $this->em->flush();
     }
 
+    public function getPlayers()
+    {
+        return $this->playersRepository->findAll();
+    }
+    
     public function getPlayer(
         int $id
         )

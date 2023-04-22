@@ -7,38 +7,26 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Business\PlayersBusiness;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
+#[Route('/players', name:'players_controller')]
 class PlayersController extends AbstractController
 {
+    public function __construct(private PlayersBusiness $playersBusiness){}
 
-    public function __construct(private PlayersBusiness $playersBusiness, private NormalizerInterface $normalizer)
+
+    #[Route('/', name: 'app_players', methods:'GET')]
+    public function index(): JsonResponse
     {
-        // $this->playersService = new PlayersService();
+        $players = $this->playersBusiness->getPlayers();
+        return $this->json($players);
     }
 
-
-    // #[Route('/players/{id}', name: 'app_players')]
-    // public function index(
-    //     string $id
-    // ): JsonResponse
-    // {
-    //     return $this->json([
-    //         'message' => 'Welcome to your new controller!',
-    //         'path' => 'src/Controller/PlayersController.php',
-    //         'id' => $id
-    //     ]);
-    // }
-
-    #[Route('/players/{id}', name: 'app_players')]
-    public function index(
+    #[Route('/{id}', name: 'app_player', methods:'GET')]
+    public function getPlayer(
         ?string $id,
     ): JsonResponse
     {
         $player = $this->playersBusiness->getPlayer($id);
-        dd($player);
-        // $player = $playersService->getPlayer($id);
         return $this->json($player);
-        
     }
 }

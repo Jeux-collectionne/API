@@ -17,7 +17,7 @@ use Doctrine\Persistence\ManagerRegistry;
 class PlayersRepository extends ServiceEntityRepository
 {
     
-    public function __construct(private ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Players::class);
     }
