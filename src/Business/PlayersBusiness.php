@@ -22,11 +22,4 @@ class PlayersBusiness {
     {
         return $this->playersRepository->findAll();
     }
-    
-    public function getPlayer(
-        int $id
-        )
-    {
-        return $this->playersRepository->find($id);
-    }
 }

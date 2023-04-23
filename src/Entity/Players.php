@@ -6,9 +6,11 @@ use App\Repository\PlayersRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: PlayersRepository::class)]
-class Players
+class Players implements PasswordAuthenticatedUserInterface, UserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -25,6 +27,10 @@ class Players
     private ?string $firstName = null;
 
     #[Groups(['public', 'private'])]
+    #[ORM\Column(type: 'json')]
+    private $roles = [];
+
+    #[Groups(['public', 'private'])]
     #[ORM\Column(nullable: true)]
     private ?int $age = null;
 
@@ -39,6 +45,17 @@ class Players
     #[Groups(['public', 'private'])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
+
+
+    /**
+     * The public representation of the user (e.g. a username, an email address, etc.)
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->mail;
+    }
 
     public function getId(): ?int
     {
@@ -69,6 +86,25 @@ class Players
         return $this;
     }
 
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
     public function getAge(): ?int
     {
         return $this->age;
@@ -93,7 +129,10 @@ class Players
         return $this;
     }
 
-    public function getPassword(): ?string
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): string
     {
         return $this->password;
     }
@@ -115,5 +154,11 @@ class Players
         $this->description = $description;
 
         return $this;
+    }
+
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
 }
