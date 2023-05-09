@@ -2,15 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\PlayersRepository;
+use App\Repository\UsersRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-#[ORM\Entity(repositoryClass: PlayersRepository::class)]
-class Players implements PasswordAuthenticatedUserInterface, UserInterface
+#[ORM\Entity(repositoryClass: UsersRepository::class)]
+class Users implements PasswordAuthenticatedUserInterface, UserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -35,7 +35,7 @@ class Players implements PasswordAuthenticatedUserInterface, UserInterface
     private ?int $age = null;
 
     #[Groups(['public', 'private'])]
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $mail = null;
 
     #[Groups(['private'])]

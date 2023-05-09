@@ -2,27 +2,27 @@
 
 namespace App\Repository;
 
-use App\Entity\Players;
+use App\Entity\Users;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Players>
+ * @extends ServiceEntityRepository<Users>
  *
- * @method Players|null find($id, $lockMode = null, $lockVersion = null)
- * @method Players|null findOneBy(array $criteria, array $orderBy = null)
- * @method Players[]    findAll()
- * @method Players[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Users|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Users|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Users[]    findAll()
+ * @method Users[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class PlayersRepository extends ServiceEntityRepository
+class UsersRepository extends ServiceEntityRepository
 {
     
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Players::class);
+        parent::__construct($registry, Users::class);
     }
 
-    public function save(Players $entity, bool $flush = false): void
+    public function save(Users $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -31,7 +31,7 @@ class PlayersRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Players $entity, bool $flush = false): void
+    public function remove(Users $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
