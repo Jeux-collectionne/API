@@ -4,13 +4,11 @@ namespace App\Controller;
 
 use App\Business\UsersBusiness;
 use App\Entity\Users;
-use App\Repository\UsersRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 
@@ -39,11 +37,15 @@ class ApiLoginController extends AbstractController
     }
 
     #[Route('/login', name:'app_login', methods:'POST')]
-    public function index(?Users $user)
+    public function index(#[CurrentUser] ?Users $user)
     {
         //dd($user);
 
-
+        if ($user === null){
+            return $this->json([
+                "error" => "Wrong credentials"
+            ]);
+        }
 
 
         return $this->json([

@@ -58,23 +58,4 @@ class UsersController extends AbstractController
             "token" => "à faire"
         ]);
     }
-
-    #[Route('/login', name:'app_player_login', methods:'POST')]
-    public function logUser(#[CurrentUser] ?Users $user)
-    {
-        // dd($user);
-
-        if (null === $user) {
-                return $this->json([
-                    'message' => 'missing credentials',
-                ], Response::HTTP_UNAUTHORIZED);
-            }
-
-
-        return $this->json([
-            "code" => 201,
-            "token" => "à faire"
-        ]);
-    }
-
 }
