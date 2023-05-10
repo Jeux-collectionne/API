@@ -14,30 +14,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 
-#[Route('/players', name:'players_controller')]
-class UsersController extends AbstractController
+class ApiLoginController extends AbstractController
 {
     public function __construct(private UsersBusiness $usersBusiness){}
-
-
-    #[Route('/', name: 'app_players', methods:'GET')]
-    public function index(): JsonResponse
-    {
-        $players = $this->usersBusiness->getUsers();
-        return $this->json($players, 200, [], [
-            'groups' => 'private'
-        ]);
-    }
-
-    #[Route('/{id}', name: 'app_get_player', methods:'GET')]
-    public function getPlayer(
-        Users $id,
-    ): JsonResponse
-    {
-        return $this->json($id, 200, [], [
-            'groups' => 'private'
-        ]);
-    }
 
     #[Route('/register', name:'register_player', methods:'POST')]
     public function registerPlayer(Request $request): JsonResponse
@@ -59,16 +38,12 @@ class UsersController extends AbstractController
         ]);
     }
 
-    #[Route('/login', name:'app_player_login', methods:'POST')]
-    public function logUser(#[CurrentUser] ?Users $user)
+    #[Route('/login', name:'app_login', methods:'POST')]
+    public function index(?Users $user)
     {
-        // dd($user);
+        //dd($user);
 
-        if (null === $user) {
-                return $this->json([
-                    'message' => 'missing credentials',
-                ], Response::HTTP_UNAUTHORIZED);
-            }
+
 
 
         return $this->json([
