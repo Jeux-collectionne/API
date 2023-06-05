@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UsersRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -46,6 +47,18 @@ class Users implements PasswordAuthenticatedUserInterface, UserInterface
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
+    // TODO: Faire les setters & getters de city et zipcode
+    #[Groups(['public', 'private'])]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $city;
+
+    #[Groups(['public', 'private'])]
+    #[ORM\Column(type: Types::INTEGER, nullable: true)]
+    private ?int $zipCode;
+
+    #[Groups(['public', 'private'])]
+    #[ORM\ManyToMany(targetEntity: Game::class)]
+    private ?Collection $games;
 
     /**
      * The public representation of the user (e.g. a username, an email address, etc.)
@@ -156,6 +169,46 @@ class Users implements PasswordAuthenticatedUserInterface, UserInterface
         return $this;
     }
 
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+    public function setCity(?string $city): self
+    {
+        $this->city = $city;
+        return $this;
+    }
+
+    public function getZipCode(): ?string
+    {
+        return $this->zipCode;
+    }
+    public function setZipCode(?string $zipCode): self
+    {
+        $this->zipCode = $zipCode;
+        return $this;
+    }
+
+    public function getGames(): Collection
+    {
+        return $this->games;
+    }
+
+    public function setGames(array $games): self
+    {
+        $this->games->clear();
+        foreach ($games as $game) {
+            $this->games->add($game);
+        }
+        return $this;
+    }
+
+    public function addGame(Game $game): self
+    {
+        $this->games->add($game);
+        return $this;
+    }
+    
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
