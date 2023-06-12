@@ -47,7 +47,6 @@ class Users implements PasswordAuthenticatedUserInterface, UserInterface
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    // TODO: Faire les setters & getters de city et zipcode
     #[Groups(['public', 'private'])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $city;
