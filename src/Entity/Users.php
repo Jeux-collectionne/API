@@ -21,6 +21,10 @@ class Users implements PasswordAuthenticatedUserInterface, UserInterface
 
     #[Groups(['public', 'private'])]
     #[ORM\Column(length: 255)]
+    private ?string $username = null;
+
+    #[Groups(['public', 'private'])]
+    #[ORM\Column(length: 255)]
     private ?string $lastName = null;
 
     #[Groups(['public', 'private'])]
@@ -72,6 +76,18 @@ class Users implements PasswordAuthenticatedUserInterface, UserInterface
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
     }
 
     public function getLastName(): ?string

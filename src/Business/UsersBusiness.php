@@ -3,6 +3,7 @@ namespace App\Business;
 
 use App\Entity\Users;
 use App\Repository\UsersRepository;
+use App\RequestBody\PlayerBody;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
@@ -17,19 +18,24 @@ class UsersBusiness {
     {
     }
 
-    public function addPlayer(array $infos)
+    /**
+     * @todo Check s'il l'adresse mail n'est pas déjà utilisée
+     */
+    public function addPlayer(PlayerBody $infos)
     {
+        
         $player = new Users();
 
-        $player->setLastName($infos['last_name']);
-        $player->setFirstName($infos['first_name']);
-        $player->setAge($infos['age'] ?? null);
-        $player->setMail($infos['mail']);
-        $player->setDescription($infos['description'] ?? null);
+        $player->setUsername($infos->getUsername());
+        $player->setLastName($infos->getLastName());
+        $player->setFirstName($infos->getFirstName());
+        $player->setAge($infos->getAge());
+        $player->setMail($infos->getEmail());
+        $player->setDescription($infos->getDescription());
 
         $pwd = $this->pwdInterface->hashPassword(
             $player,
-            $infos['password']
+            $infos->getPassword()
         );
         $player->setPassword($pwd);
         $this->em->persist($player);
