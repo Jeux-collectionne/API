@@ -51,13 +51,8 @@ class Users implements PasswordAuthenticatedUserInterface, UserInterface
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[Groups(['public', 'private'])]
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $city;
-
-    #[Groups(['public', 'private'])]
-    #[ORM\Column(type: Types::INTEGER, nullable: true)]
-    private ?int $zipCode;
+    #[ORM\OneToOne(targetEntity: Address::class, nullable: false)]
+    private ?Address $Address;
 
     #[Groups(['public', 'private'])]
     #[ORM\ManyToMany(targetEntity: Game::class)]
@@ -184,23 +179,13 @@ class Users implements PasswordAuthenticatedUserInterface, UserInterface
         return $this;
     }
 
-    public function getCity(): ?string
+    public function getAddress(): ?Address
     {
-        return $this->city;
+        return $this->Address;
     }
-    public function setCity(?string $city): self
+    public function setAddress(?string $address): self
     {
-        $this->city = $city;
-        return $this;
-    }
-
-    public function getZipCode(): ?string
-    {
-        return $this->zipCode;
-    }
-    public function setZipCode(?string $zipCode): self
-    {
-        $this->zipCode = $zipCode;
+        $this->Address = $address;
         return $this;
     }
 

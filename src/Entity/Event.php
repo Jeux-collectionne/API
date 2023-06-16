@@ -31,6 +31,9 @@ class Event {
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: false)]
     private ?DateTime $date;
 
+    #[ORM\OneToOne(targetEntity: Address::class, nullable: false)]
+    private ?Address $Address;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -86,13 +89,22 @@ class Event {
         $this->game = $game;
         return $this;
     }
-    public function getDate(): ?string
+    public function getDate(): ?DateTime
     {
         return $this->date;
     }
-    public function setDate(?string $date): self
+    public function setDate(?DateTime $date): self
     {
         $this->date = $date;
+        return $this;
+    }
+    public function getAddress(): ?Address
+    {
+        return $this->Address;
+    }
+    public function setAddress(?Address $Address): self
+    {
+        $this->Address = $Address;
         return $this;
     }
 }
