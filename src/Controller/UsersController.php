@@ -4,20 +4,18 @@ namespace App\Controller;
 
 use App\Business\UsersBusiness;
 use App\Entity\Users;
-use App\Repository\UsersRepository;
+use App\Helper\CustomHelper;
+use App\RequestBody\PlayerBody;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\Security\Http\Attribute\CurrentUser;
-
+use FOS\RestBundle\Controller\AbstractFOSRestController;
 
 #[Route('/players', name:'players_controller')]
-class UsersController extends AbstractController
+class UsersController extends AbstractFOSRestController
 {
-    public function __construct(private UsersBusiness $usersBusiness){}
+    public function __construct(private UsersBusiness $usersBusiness, private CustomHelper $helper){}
 
 
     #[Route('/', name: 'app_players', methods:'GET')]
@@ -38,24 +36,22 @@ class UsersController extends AbstractController
             'groups' => 'private'
         ]);
     }
-
     #[Route('/register', name:'register_player', methods:'POST')]
-    public function registerPlayer(Request $request): JsonResponse
+    #[ParamConverter('playerBody', converter:"fos_rest.request_body")]
+    public function registerPlayer(PlayerBody $playerBody)
     {
-        $requestBody = json_decode($request->getContent(), true);
 
-        if ($requestBody === null) {
-            return $this->json([
-                'code' => Response::HTTP_BAD_REQUEST,
-                'message' => 'missing credentials',
-                ], Response::HTTP_BAD_REQUEST);
+        if ($errors = $this->helper->validate($playerBody)) {
+            return $this->json($errors);
         }
 
-        $this->usersBusiness->addPlayer($requestBody);
-
-        return $this->json([
+        $this->usersBusiness->addPlayer($playerBody);
+        
+        $view = [
             "code" => 201,
             "token" => "à faire"
-        ]);
+        ];
+        return $this->json($view);
+        
     }
 }

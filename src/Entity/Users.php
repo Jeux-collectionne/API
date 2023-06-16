@@ -21,6 +21,10 @@ class Users implements PasswordAuthenticatedUserInterface, UserInterface
 
     #[Groups(['public', 'private'])]
     #[ORM\Column(length: 255)]
+    private ?string $username = null;
+
+    #[Groups(['public', 'private'])]
+    #[ORM\Column(length: 255)]
     private ?string $lastName = null;
 
     #[Groups(['public', 'private'])]
@@ -47,14 +51,8 @@ class Users implements PasswordAuthenticatedUserInterface, UserInterface
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    // TODO: Faire les setters & getters de city et zipcode
-    #[Groups(['public', 'private'])]
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $city;
-
-    #[Groups(['public', 'private'])]
-    #[ORM\Column(type: Types::INTEGER, nullable: true)]
-    private ?int $zipCode;
+    #[ORM\OneToOne(targetEntity: Address::class, nullable: false)]
+    private ?Address $Address;
 
     #[Groups(['public', 'private'])]
     #[ORM\ManyToMany(targetEntity: Game::class)]
@@ -73,6 +71,18 @@ class Users implements PasswordAuthenticatedUserInterface, UserInterface
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
     }
 
     public function getLastName(): ?string
@@ -169,23 +179,13 @@ class Users implements PasswordAuthenticatedUserInterface, UserInterface
         return $this;
     }
 
-    public function getCity(): ?string
+    public function getAddress(): ?Address
     {
-        return $this->city;
+        return $this->Address;
     }
-    public function setCity(?string $city): self
+    public function setAddress(?string $address): self
     {
-        $this->city = $city;
-        return $this;
-    }
-
-    public function getZipCode(): ?string
-    {
-        return $this->zipCode;
-    }
-    public function setZipCode(?string $zipCode): self
-    {
-        $this->zipCode = $zipCode;
+        $this->Address = $address;
         return $this;
     }
 
