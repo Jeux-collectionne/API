@@ -3,21 +3,22 @@
 namespace App\Controller;
 
 use App\Business\EventBusiness;
+use App\Entity\Event;
 use App\RequestBody\EventBody;
-use App\RequestBody\PlayerBody;
+use FOS\RestBundle\Controller\Annotations\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
-#[Route('/event', name: 'event_controller')]
+/** @todo Faire l'appel au business pour les réponses */
+#[Route(path: '/events', name: 'event_controller')]
 class EventController extends AbstractController
 {
     public function __construct(
         private EventBusiness $eventBusiness
     ){}
 
-    #[Route('', methods: 'GET')]
+    #[Route(path: '', methods: 'GET')]
     public function getEvents(): Response
     {
         return $this->json([
@@ -25,9 +26,19 @@ class EventController extends AbstractController
         ]);
     }
 
-    #[Route('', methods: 'POST')]
+    #[Route(path: '', methods: 'POST')]
     #[ParamConverter("event", class: EventBody::class, converter:"fos_rest.request_body")]
-    public function test(EventBody $event){
+    public function created(EventBody $event){
+        dd($event);
+    }
+
+    #[Route(path: '/{event}', methods: 'PUT')]
+    public function modifyEvent(Event $event){
+        dd($event);
+    }
+
+    #[Route(path: '/{event}', methods: 'DELETE')]
+    public function deleteEvent(Event $event){
         dd($event);
     }
 }
