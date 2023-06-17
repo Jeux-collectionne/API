@@ -31,7 +31,7 @@ class Event {
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: false)]
     private ?DateTime $date;
 
-    #[ORM\OneToOne(targetEntity: Address::class, nullable: false)]
+    #[ORM\OneToOne(targetEntity: Address::class)]
     private ?Address $Address;
 
     public function getId(): ?int

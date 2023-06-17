@@ -20,15 +20,15 @@ class Users implements PasswordAuthenticatedUserInterface, UserInterface
     private ?int $id = null;
 
     #[Groups(['public', 'private'])]
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::TEXT, length: 255)]
     private ?string $username = null;
 
     #[Groups(['public', 'private'])]
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::TEXT, length: 255)]
     private ?string $lastName = null;
 
     #[Groups(['public', 'private'])]
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::TEXT, length: 255)]
     private ?string $firstName = null;
 
     #[Groups(['public', 'private'])]
@@ -36,22 +36,22 @@ class Users implements PasswordAuthenticatedUserInterface, UserInterface
     private $roles = [];
 
     #[Groups(['public', 'private'])]
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(type: Types::INTEGER, nullable: true)]
     private ?int $age = null;
 
     #[Groups(['public', 'private'])]
-    #[ORM\Column(length: 255, unique: true)]
+    #[ORM\Column(type: Types::TEXT, length: 255, unique: true)]
     private ?string $mail = null;
 
     #[Groups(['private'])]
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::TEXT, length: 255)]
     private ?string $password = null;
 
     #[Groups(['public', 'private'])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\OneToOne(targetEntity: Address::class, nullable: false)]
+    #[ORM\OneToOne(targetEntity: Address::class)]
     private ?Address $Address;
 
     #[Groups(['public', 'private'])]
