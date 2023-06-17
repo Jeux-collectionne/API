@@ -7,18 +7,17 @@ use App\Entity\Users;
 use App\Helper\CustomHelper;
 use App\RequestBody\PlayerBody;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
+use FOS\RestBundle\Controller\Annotations\Route;
 
-#[Route('/players', name:'players_controller')]
+#[Route(path: '/players', name:'players_controller')]
 class UsersController extends AbstractFOSRestController
 {
     public function __construct(private UsersBusiness $usersBusiness, private CustomHelper $helper){}
 
 
-    #[Route('/', name: 'app_players', methods:'GET')]
+    #[Route(path: '', name: 'app_players', methods:'GET')]
     public function index(): JsonResponse
     {
         $players = $this->usersBusiness->getUsers();
@@ -27,7 +26,7 @@ class UsersController extends AbstractFOSRestController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_get_player', methods:'GET')]
+    #[Route(path: '/{id}', name: 'app_get_player', methods:'GET')]
     public function getPlayer(
         Users $id,
     ): JsonResponse
@@ -36,7 +35,7 @@ class UsersController extends AbstractFOSRestController
             'groups' => 'private'
         ]);
     }
-    #[Route('/register', name:'register_player', methods:'POST')]
+    #[Route(path: '/register', name:'register_player', methods:'POST')]
     #[ParamConverter('playerBody', converter:"fos_rest.request_body")]
     public function registerPlayer(PlayerBody $playerBody)
     {
