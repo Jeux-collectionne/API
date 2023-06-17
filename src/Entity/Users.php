@@ -20,15 +20,15 @@ class Users implements PasswordAuthenticatedUserInterface, UserInterface
     private ?int $id = null;
 
     #[Groups(['public', 'private'])]
-    #[ORM\Column(type: Types::TEXT, length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     private ?string $username = null;
 
     #[Groups(['public', 'private'])]
-    #[ORM\Column(type: Types::TEXT, length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     private ?string $lastName = null;
 
     #[Groups(['public', 'private'])]
-    #[ORM\Column(type: Types::TEXT, length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     private ?string $firstName = null;
 
     #[Groups(['public', 'private'])]
@@ -40,11 +40,11 @@ class Users implements PasswordAuthenticatedUserInterface, UserInterface
     private ?int $age = null;
 
     #[Groups(['public', 'private'])]
-    #[ORM\Column(type: Types::TEXT, length: 255, unique: true)]
-    private ?string $mail = null;
+    #[ORM\Column(type: Types::STRING, length: 255, unique: true)]
+    private ?string $email = null;
 
     #[Groups(['private'])]
-    #[ORM\Column(type: Types::TEXT, length: 255)]
+    #[ORM\Column(type: Types::TEXT, length: 460)]
     private ?string $password = null;
 
     #[Groups(['public', 'private'])]
@@ -65,7 +65,7 @@ class Users implements PasswordAuthenticatedUserInterface, UserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->mail;
+        return (string) $this->email;
     }
 
     public function getId(): ?int
@@ -140,14 +140,14 @@ class Users implements PasswordAuthenticatedUserInterface, UserInterface
         return $this;
     }
 
-    public function getMail(): ?string
+    public function getEmail(): ?string
     {
-        return $this->mail;
+        return $this->email;
     }
 
-    public function setMail(string $mail): self
+    public function setEmail(string $email): self
     {
-        $this->mail = $mail;
+        $this->email = $email;
 
         return $this;
     }

@@ -33,6 +33,9 @@ class Event {
     #[ORM\OneToOne(targetEntity: Address::class)]
     private ?Address $Address;
 
+    #[ORM\ManyToOne(targetEntity: Users::class)]
+    private ?Users $User;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -104,6 +107,15 @@ class Event {
     public function setAddress(?Address $Address): self
     {
         $this->Address = $Address;
+        return $this;
+    }
+    public function getUser(): ?Users
+    {
+        return $this->User;
+    }
+    public function setUser(?Users $User): self
+    {
+        $this->User = $User;
         return $this;
     }
 }

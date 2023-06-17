@@ -2,20 +2,26 @@
 
 namespace App\RequestBody;
 
+use Symfony\Component\Validator\Constraints as Assert;
 use DateTime;
 
 class EventBody
 {
+    #[Assert\NotBlank()]
     private ?string $name;
 
     private ?int $players;
 
+    #[Assert\NotBlank()]
     private ?int $maxPlayers;
 
+    #[Assert\NotBlank()]
     private ?int $game;
 
+    #[Assert\NotBlank()]
     private ?DateTime $date;
 
+    #[Assert\NotBlank()]
     private ?AddressBody $Address;
 
 

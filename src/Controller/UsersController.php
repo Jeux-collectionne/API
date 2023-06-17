@@ -6,8 +6,8 @@ use App\Business\UsersBusiness;
 use App\Entity\Users;
 use App\Helper\CustomHelper;
 use App\RequestBody\PlayerBody;
+use FOS\RestBundle\Context\Context;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations\Route;
 
@@ -16,41 +16,52 @@ class UsersController extends AbstractFOSRestController
 {
     public function __construct(private UsersBusiness $usersBusiness, private CustomHelper $helper){}
 
-
-    #[Route(path: '', name: 'app_players', methods:'GET')]
-    public function index(): JsonResponse
+    #[Route(path: '', methods: 'GET')]
+    public function index()
     {
         $players = $this->usersBusiness->getUsers();
-        return $this->json($players, 200, [], [
-            'groups' => 'private'
-        ]);
+        $view = $this->view($players)->setContext((new Context())->setGroups(['public']));
+        return $this->handleView($view);
     }
 
-    #[Route(path: '/{id}', name: 'app_get_player', methods:'GET')]
-    public function getPlayer(
-        Users $id,
-    ): JsonResponse
+    #[Route(path: '/{user}', methods: 'GET')]
+    public function getPlayer(Users $user)
     {
-        return $this->json($id, 200, [], [
-            'groups' => 'private'
-        ]);
+        $view = $this->view($user)->setContext((new Context())->setGroups(['public']));
+        return $this->handleView($view);
     }
-    #[Route(path: '/register', name:'register_player', methods:'POST')]
+
+    /** @todo Faire l'appel à l'helper de token */
+    #[Route(path: '/register', methods: 'POST')]
     #[ParamConverter('playerBody', converter:"fos_rest.request_body")]
     public function registerPlayer(PlayerBody $playerBody)
     {
-
-        if ($errors = $this->helper->validate($playerBody)) {
-            return $this->json($errors);
-        }
-
         $this->usersBusiness->addPlayer($playerBody);
         
-        $view = [
-            "code" => 201,
+        $view = $this->view([
             "token" => "à faire"
-        ];
-        return $this->json($view);
+        ]);
+        return $this->handleView($view);
         
     }
+
+    #[Route(path: '/{user}', methods: 'DELETE')]
+    public function deletePlayer(Users $user)
+    {
+        $this->usersBusiness->deletePlayer($user);
+        $view = $this->view();
+        return $this->handleView($view);
+    }
+
+    
+    #[Route(path: '/{user}', methods: 'PUT')]
+    #[ParamConverter('playerBody', class: PlayerBody::class, converter: 'fos_rest.request_body')]
+    public function modifyPlayer(Users $user, PlayerBody $playerBody)
+    {
+        $this->usersBusiness->modifyPlayer($user, $playerBody);
+        $view = $this->view();
+        return $this->handleView($view);
+    }
+
+
 }

@@ -6,7 +6,6 @@ use App\Repository\UsersRepository;
 use App\RequestBody\PlayerBody;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 class UsersBusiness {
 
@@ -14,9 +13,8 @@ class UsersBusiness {
     public function __construct(
         private EntityManagerInterface $em,
         private UsersRepository $usersRepository,
-        private UserPasswordHasherInterface $pwdInterface)
-    {
-    }
+        private UserPasswordHasherInterface $pwdInterface
+    ){}
 
     /**
      * @todo Check s'il l'adresse mail n'est pas déjà utilisée
@@ -30,7 +28,7 @@ class UsersBusiness {
         $player->setLastName($infos->getLastName());
         $player->setFirstName($infos->getFirstName());
         $player->setAge($infos->getAge());
-        $player->setMail($infos->getEmail());
+        $player->setEmail($infos->getEmail());
         $player->setDescription($infos->getDescription());
 
         $pwd = $this->pwdInterface->hashPassword(
@@ -45,5 +43,17 @@ class UsersBusiness {
     public function getUsers()
     {
         return $this->usersRepository->findAll();
+    }
+
+    public function deletePlayer($player)
+    {
+        $this->usersRepository->remove($player, true);
+    }
+
+    /** @todo */
+    public function modifyPlayer(Users $player, PlayerBody $playerBody)
+    {
+        $player->setUsername($playerBody->getUsername())
+               ->setLastName($playerBody->getLastName());
     }
 }

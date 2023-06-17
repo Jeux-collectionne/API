@@ -39,14 +39,6 @@ class ApiLoginController extends AbstractController
     #[Route('/login', name:'app_login', methods:'POST')]
     public function index(#[CurrentUser] ?Users $user)
     {
-        //dd($user);
-
-        if ($user === null){
-            return $this->json([
-                "error" => "Wrong credentials"
-            ]);
-        }
-
 
         return $this->json([
             "code" => 201,
