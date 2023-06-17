@@ -24,9 +24,7 @@ class EventController extends AbstractController
         ]);
     }
 
-    /**
-    * @ParamConverter("test", converter="fos_rest.request_body")
-    */
+    #[ParamConverter("test", converter:"fos_rest.request_body")]
     #[Route('/test', methods: 'POST')]
     public function test(PlayerBody $test){
         dd($test);
