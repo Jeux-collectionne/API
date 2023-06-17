@@ -24,9 +24,8 @@ class Event {
     #[ORM\Column(type: Types::INTEGER, nullable: true)]
     private ?int $maxPlayers;
 
-    #[ORM\Column(nullable: false)]
-    #[ORM\ManyToMany(targetEntity: Game::class)]
-    private ?Game $game;
+    #[ORM\Column(type: Types::INTEGER, nullable: false)]
+    private ?int $game;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: false)]
     private ?DateTime $date;

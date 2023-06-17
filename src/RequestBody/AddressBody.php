@@ -1,38 +1,14 @@
 <?php
 
-namespace App\Entity;
+namespace App\RequestBody;
 
-use App\Repository\AddressRepository;
-use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Mapping as ORM;
-
-#[ORM\Entity(repositoryClass: AddressRepository::class)]
-class Address
+class AddressBody
 {
-
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column(type: Types::TEXT, nullable:false)]
     private ?string $city;
 
-    #[ORM\Column(type: Types::INTEGER, nullable:false)]
     private ?int $zipCode;
 
-    #[ORM\Column(type: Types::TEXT, nullable:true)]
     private ?string $name;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-    public function setId(?int $id): self
-    {
-        $this->id = $id;
-        return $this;
-    }
 
     public function getCity(): ?string
     {
@@ -43,6 +19,7 @@ class Address
         $this->city = $city;
         return $this;
     }
+
     public function getZipCode(): ?int
     {
         return $this->zipCode;
@@ -52,6 +29,7 @@ class Address
         $this->zipCode = $zipCode;
         return $this;
     }
+
     public function getName(): ?string
     {
         return $this->name;

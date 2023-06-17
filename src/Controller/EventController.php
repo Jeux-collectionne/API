@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Business\EventBusiness;
+use App\RequestBody\EventBody;
 use App\RequestBody\PlayerBody;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,9 +25,9 @@ class EventController extends AbstractController
         ]);
     }
 
-    #[ParamConverter("test", converter:"fos_rest.request_body")]
-    #[Route('/test', methods: 'POST')]
-    public function test(PlayerBody $test){
-        dd($test);
+    #[Route('', methods: 'POST')]
+    #[ParamConverter("event", class: EventBody::class, converter:"fos_rest.request_body")]
+    public function test(EventBody $event){
+        dd($event);
     }
 }
