@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Business\EventBusiness;
 use App\Entity\Event;
+use App\Entity\Users;
 use App\RequestBody\EventBody;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations\Route;
@@ -21,14 +22,24 @@ class EventController extends AbstractFOSRestController
     public function getEvents()
     {
         $events = $this->eventBusiness->getEvents();
+        // dd($events);
         $view = $this->view($events);
         return $this->handleView($view);
     }
 
-    #[Route(path: '', methods: 'POST')]
-    #[ParamConverter("event", class: EventBody::class, converter: "fos_rest.request_body")]
-    public function created(EventBody $event){
+    #[Route(path: '/{event}', methods: 'GET')]
+    public function getEvent(Event $event)
+    {
         dd($event);
+    }
+
+    #[Route(path: '/{player}', methods: 'POST')]
+    #[ParamConverter("eventBody", class: EventBody::class, converter: "fos_rest.request_body")]
+    public function createEvent(Users $player, EventBody $eventBody)
+    {
+        $this->eventBusiness->addEvent($eventBody, $player);
+        $view = $this->view();
+        return $this->handleView($view);
     }
 
     #[Route(path: '/{event}', methods: 'PUT')]
@@ -36,6 +47,7 @@ class EventController extends AbstractFOSRestController
         dd($event);
     }
 
+    /** @todo Vérifier que c'est bien celui qui à créé l'event qui veut le supprimer */
     #[Route(path: '/{event}', methods: 'DELETE')]
     public function deleteEvent(Event $event){
         dd($event);

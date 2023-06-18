@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\EventRepository;
-use DateTime;
+use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -28,7 +28,7 @@ class Event {
     private ?int $game;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: false)]
-    private ?DateTime $date;
+    private ?DateTimeImmutable $date;
 
     #[ORM\OneToOne(targetEntity: Address::class)]
     private ?Address $Address;
@@ -82,20 +82,20 @@ class Event {
         $this->maxPlayers = $maxPlayers;
         return $this;
     }
-    public function getGame(): ?Game
+    public function getGame(): ?int
     {
         return $this->game;
     }
-    public function setGame(?Game $game): self
+    public function setGame(?int $game): self
     {
         $this->game = $game;
         return $this;
     }
-    public function getDate(): ?DateTime
+    public function getDate(): ?DateTimeImmutable
     {
         return $this->date;
     }
-    public function setDate(?DateTime $date): self
+    public function setDate(?DateTimeImmutable $date): self
     {
         $this->date = $date;
         return $this;

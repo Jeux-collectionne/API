@@ -3,7 +3,7 @@
 namespace App\RequestBody;
 
 use Symfony\Component\Validator\Constraints as Assert;
-use DateTime;
+use DateTimeImmutable;
 
 class EventBody
 {
@@ -19,7 +19,7 @@ class EventBody
     private ?int $game;
 
     #[Assert\NotBlank()]
-    private ?DateTime $date;
+    private ?DateTimeImmutable $date;
 
     #[Assert\NotBlank()]
     private ?AddressBody $Address;
@@ -70,11 +70,11 @@ class EventBody
         return $this;
     }
 
-    public function getDate(): ?DateTime
+    public function getDate(): ?DateTimeImmutable
     {
         return $this->date;
     }
-    public function setDate(?DateTime $date): self
+    public function setDate(?DateTimeImmutable $date): self
     {
         $this->date = $date;
         return $this;

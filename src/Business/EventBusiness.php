@@ -1,7 +1,9 @@
 <?php
 namespace App\Business;
 
+use App\Entity\Address;
 use App\Entity\Event;
+use App\Entity\Users;
 use App\Repository\EventRepository;
 use App\RequestBody\EventBody;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,17 +17,26 @@ class EventBusiness {
         private EventRepository $eventRepository,
     ){}
 
-    public function addEvent(EventBody $eventBody)
+    public function addEvent(EventBody $eventBody, Users $player)
     {
         $event = new Event();
+        $address = new Address();
 
+        $address->setCity($eventBody->getAddress()->getCity())
+                ->setZipCode($eventBody->getAddress()->getZipCode())
+                ->setName($eventBody->getAddress()->getName());
+
+        $this->em->persist($address);
+
+        /** @todo Récup le user via le token à la place */
         $event->setName($eventBody->getName())
               ->setPlayers($eventBody->getPlayers())
               ->setMaxPlayers($eventBody->getMaxPlayers())
               ->setGame($eventBody->getGame())
               ->setDate($eventBody->getDate())
-              ->setAddress($eventBody->getAddress());
-              
+              ->setAddress($address)
+              ->setUser($player);
+
         $this->em->persist($event);
         $this->em->flush();
     }
