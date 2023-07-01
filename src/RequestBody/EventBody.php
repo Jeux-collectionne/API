@@ -10,7 +10,7 @@ class EventBody
     #[Assert\NotBlank()]
     private ?string $name;
 
-    private ?int $players;
+    private ?array $players;
 
     #[Assert\NotBlank()]
     private ?int $maxPlayers;
@@ -36,17 +36,13 @@ class EventBody
     }
 
 
-    public function getPlayers(): ?int
+    public function getPlayers(): ?array
     {
         return $this->players;
     }
-    public function setPlayers(?int $players): self
+    public function setPlayers(?array $playersId): self
     {
-        if (null === $players) {
-            $this->players = 1;
-        }else {
-            $this->players = $players;
-        }
+        $this->players = $playersId;
         return $this;
     }
     

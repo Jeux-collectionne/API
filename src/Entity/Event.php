@@ -6,6 +6,8 @@ use App\Repository\EventRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
+use PhpParser\Node\Expr\Instanceof_;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 class Event {
@@ -18,8 +20,9 @@ class Event {
     #[ORM\Column(type: Types::TEXT, nullable: false)]
     private ?string $name;
 
-    #[ORM\Column(type: Types::INTEGER, nullable: false)]
-    private ?int $players;
+    /** @todo fix ça: ne peut pas faire addPlayer parce pas instancié */
+    #[ORM\ManyToMany(targetEntity: Users::class)]
+    private ?PersistentCollection $players;
 
     #[ORM\Column(type: Types::INTEGER, nullable: true)]
     private ?int $maxPlayers;
@@ -34,8 +37,9 @@ class Event {
     private ?Address $Address;
 
     #[ORM\ManyToOne(targetEntity: Users::class)]
-    private ?Users $User;
+    private ?Users $eventCreator;
 
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -54,24 +58,54 @@ class Event {
         $this->name = $name;
         return $this;
     }
-    public function getPlayers(): ?int
+    public function getPlayers(): ?PersistentCollection
     {
         return $this->players;
     }
-    public function addPlayer(): self
+    /**
+     * @param null|Users|Users[] players
+     */
+    public function addPlayers(null|Users|array $players): self
     {
-        $this->players += 1;
+        if ($players instanceof Users) {
+            $this->players->add($players);
+            return $this;
+        }
+        foreach ($players as $player) {
+            if (!$player instanceof Users) {
+                throw new \Exception('player must be of instance \'Users\'');
+            }
+            if ($this->maxPlayers > $this->getPlayersNb()) {
+                if ($this->getPlayers()->contains($player)) {
+                    throw new \Exception(sprintf('%s is already in this event', $player->getUsername()));
+                }
+                $this->players?->add($player);
+            }else {
+                throw new \Exception('This event is already full');
+            }
+        }
+        
         return $this;
     }
-    public function removePlayer(): self
+    public function removePlayer(Users $player): self
     {
-        $this->players -= 1;
+        $this->players->removeElement($player) ?: throw new \Exception('This player was not in this event in the first place');
         return $this;
     }
-    public function setPlayers(?int $players): self
+    // public function setPlayers(?Users... $players): self
+    // {
+    //     $playersCollection = new PersistentCollection();
+    //     if ($players !== null) {
+    //         foreach ($players as $player) {
+    //             $playersCollection->add($player);
+    //         }
+    //     }
+    //     $this->players = $playersCollection;
+    //     return $this;
+    // }
+    public function getPlayersNb(): ?int
     {
-        $this->players = $players;
-        return $this;
+        return count($this->getPlayers()->toArray());
     }
     public function getMaxPlayers(): ?int
     {
@@ -111,11 +145,11 @@ class Event {
     }
     public function getUser(): ?Users
     {
-        return $this->User;
+        return $this->eventCreator;
     }
-    public function setUser(?Users $User): self
+    public function setUser(?Users $player): self
     {
-        $this->User = $User;
+        $this->eventCreator = $player;
         return $this;
     }
 }

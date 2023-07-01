@@ -22,7 +22,6 @@ class EventController extends AbstractFOSRestController
     public function getEvents()
     {
         $events = $this->eventBusiness->getEvents();
-        // dd($events);
         $view = $this->view($events);
         return $this->handleView($view);
     }
@@ -42,14 +41,24 @@ class EventController extends AbstractFOSRestController
         return $this->handleView($view);
     }
 
+    #[Route(path: '/{event}/{player}', methods: 'PUT')]
+    public function joinEvent(Event $event, Users $player){
+        $this->eventBusiness->joinEvent($event, $player);
+        $view = $this->view();
+        return $this->handleView($view);
+    }
+
     #[Route(path: '/{event}', methods: 'PUT')]
     public function modifyEvent(Event $event){
         dd($event);
     }
 
+
     /** @todo Vérifier que c'est bien celui qui à créé l'event qui veut le supprimer */
     #[Route(path: '/{event}', methods: 'DELETE')]
     public function deleteEvent(Event $event){
-        dd($event);
+        $this->eventBusiness->deleteEvent($event);
+        $view = $this->view();
+        return $this->handleView($view);
     }
 }
