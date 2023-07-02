@@ -197,8 +197,10 @@ class Users implements PasswordAuthenticatedUserInterface, UserInterface
     public function setGames(array $games): self
     {
         $this->games->clear();
-        foreach ($games as $game) {
-            $this->games->add($game);
+        if ($games !== null) {
+            foreach ($games as $game) {
+                $this->games->add($game);
+            }
         }
         return $this;
     }

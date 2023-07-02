@@ -6,6 +6,7 @@ use App\Business\EventBusiness;
 use App\Entity\Event;
 use App\Entity\Users;
 use App\RequestBody\EventBody;
+use FOS\RestBundle\Context\Context;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -22,7 +23,7 @@ class EventController extends AbstractFOSRestController
     public function getEvents()
     {
         $events = $this->eventBusiness->getEvents();
-        $view = $this->view($events);
+        $view = $this->view($events)->setContext((new Context())->setGroups(['public']));
         return $this->handleView($view);
     }
 
@@ -41,18 +42,24 @@ class EventController extends AbstractFOSRestController
         return $this->handleView($view);
     }
 
-    #[Route(path: '/{event}/{player}', methods: 'PUT')]
+    #[Route(path: '/join/{event}/{player}', methods: 'PUT')]
     public function joinEvent(Event $event, Users $player){
         $this->eventBusiness->joinEvent($event, $player);
         $view = $this->view();
         return $this->handleView($view);
     }
-
+    
     #[Route(path: '/{event}', methods: 'PUT')]
     public function modifyEvent(Event $event){
         dd($event);
     }
-
+    
+    #[Route(path: '/leave/{event}/{player}', methods: 'PUT')]
+    public function leaveEvent(Event $event, Users $player){
+        $this->eventBusiness->leaveEvent($event, $player);
+        $view = $this->view();
+        return $this->handleView($view);
+    }
 
     /** @todo Vérifier que c'est bien celui qui à créé l'event qui veut le supprimer */
     #[Route(path: '/{event}', methods: 'DELETE')]

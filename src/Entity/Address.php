@@ -5,22 +5,26 @@ namespace App\Entity;
 use App\Repository\AddressRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: AddressRepository::class)]
 class Address
 {
-
+    #[Groups(["public"])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(["public"])]
     #[ORM\Column(type: Types::TEXT, nullable:false)]
     private ?string $city;
 
+    #[Groups(["public"])]
     #[ORM\Column(type: Types::INTEGER, nullable:false)]
     private ?int $zipCode;
 
+    #[Groups(["public"])]
     #[ORM\Column(type: Types::TEXT, nullable:true)]
     private ?string $name;
 

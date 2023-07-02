@@ -10,7 +10,7 @@ class EventBody
     #[Assert\NotBlank()]
     private ?string $name;
 
-    private ?array $players;
+    private array $players = [];
 
     #[Assert\NotBlank()]
     private ?int $maxPlayers;

@@ -24,7 +24,8 @@ class EventBusiness {
         $event = new Event();
         $address = new Address();
         $players = [];
-        foreach ($eventBody->getPlayers() as $playerId) {
+        $eventPlayers = $eventBody->getPlayers();
+        foreach ($eventPlayers as $playerId) {
             $player = $this->usersRepository->find($playerId);
             $player !== null ? $players[] = $player : null;
         }
@@ -35,14 +36,13 @@ class EventBusiness {
         $this->em->persist($address);
         
         /** @todo Récup le user via le token à la place */
-        dd();
         $event->setName($eventBody->getName())
         ->setMaxPlayers($eventBody->getMaxPlayers())
         ->addPlayers($players)
         ->setGame($eventBody->getGame())
         ->setDate($eventBody->getDate())
         ->setAddress($address)
-        ->setUser($player);
+        ->setEventCreator($player);
         $this->em->persist($event);
         $this->em->flush();
     }
@@ -63,6 +63,7 @@ class EventBusiness {
     public function leaveEvent(Event $event, Users $player): void
     {
         $event->removePlayer($player);
+        $this->em->flush();
     }
 
     public function deleteEvent(Event $event)
