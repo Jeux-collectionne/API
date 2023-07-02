@@ -23,7 +23,7 @@ class EventController extends AbstractFOSRestController
     public function getEvents()
     {
         $events = $this->eventBusiness->getEvents();
-        $view = $this->view($events)->setContext((new Context())->setGroups(['public']));
+        $view = $this->view($events)->setContext((new Context())->setGroups(['public-event']));
         return $this->handleView($view);
     }
 

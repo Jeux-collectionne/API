@@ -19,15 +19,15 @@ class Users implements PasswordAuthenticatedUserInterface, UserInterface
     #[Groups(['public', 'private'])]
     private ?int $id = null;
 
-    #[Groups(['public', 'private'])]
+    #[Groups(['public', 'private', 'public-event'])]
     #[ORM\Column(type: Types::STRING, length: 255)]
     private ?string $username = null;
 
-    #[Groups(['public', 'private'])]
+    #[Groups(['public', 'private', 'public-event'])]
     #[ORM\Column(type: Types::STRING, length: 255)]
     private ?string $lastName = null;
 
-    #[Groups(['public', 'private'])]
+    #[Groups(['public', 'private', 'public-event'])]
     #[ORM\Column(type: Types::STRING, length: 255)]
     private ?string $firstName = null;
 

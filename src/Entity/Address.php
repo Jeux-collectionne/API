@@ -10,21 +10,21 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: AddressRepository::class)]
 class Address
 {
-    #[Groups(["public"])]
+    #[Groups(["public-event"])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(["public"])]
+    #[Groups(["public-event"])]
     #[ORM\Column(type: Types::TEXT, nullable:false)]
     private ?string $city;
 
-    #[Groups(["public"])]
+    #[Groups(["public-event"])]
     #[ORM\Column(type: Types::INTEGER, nullable:false)]
     private ?int $zipCode;
 
-    #[Groups(["public"])]
+    #[Groups(["public-event"])]
     #[ORM\Column(type: Types::TEXT, nullable:true)]
     private ?string $name;
 

@@ -13,38 +13,38 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 class Event {
 
-    #[Groups(["public"])]
+    #[Groups(["public-event"])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id;
 
-    #[Groups(["public"])]
+    #[Groups(["public-event"])]
     #[ORM\Column(type: Types::TEXT, nullable: false)]
     private ?string $name;
 
     /** @todo fix ça: ne peut pas faire addPlayer parce pas instancié */
-    #[Groups(["public"])]
+    #[Groups(["public-event"])]
     #[ORM\ManyToMany(targetEntity: Users::class)]
     private ?Collection $players;
 
-    #[Groups(["public"])]
+    #[Groups(["public-event"])]
     #[ORM\Column(type: Types::INTEGER, nullable: true)]
     private ?int $maxPlayers;
 
-    #[Groups(["public"])]
+    #[Groups(["public-event"])]
     #[ORM\Column(type: Types::INTEGER, nullable: false)]
     private ?int $game;
 
-    #[Groups(["public"])]
+    #[Groups(["public-event"])]
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: false)]
     private ?DateTimeImmutable $date;
 
-    #[Groups(["public"])]
+    #[Groups(["public-event"])]
     #[ORM\OneToOne(targetEntity: Address::class)]
     private ?Address $Address;
 
-    #[Groups(["public"])]
+    #[Groups(["public-event"])]
     #[ORM\ManyToOne(targetEntity: Users::class)]
     private ?Users $eventCreator;
 
@@ -118,7 +118,7 @@ class Event {
         $this->players->removeElement($player) ?: throw new \Exception('This player was not in this event in the first place');
         return $this;
     }
-    #[Groups("public")]
+    #[Groups("public-event")]
     public function getPlayersNb(): ?int
     {
         return count($this->players->toArray());
@@ -169,13 +169,13 @@ class Event {
         return $this;
     }
 
-    #[Groups(["public"])]
+    #[Groups(["public-event"])]
     public function getEventCreator(): ?Users
     {
         return $this->eventCreator;
     }
 
-    #[Groups(["public"])]
+    #[Groups(["public-event"])]
     public function setEventCreator(?Users $eventCreator): self
     {
         $this->eventCreator = $eventCreator;
