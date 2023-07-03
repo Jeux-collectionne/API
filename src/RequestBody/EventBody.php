@@ -2,20 +2,26 @@
 
 namespace App\RequestBody;
 
-use DateTime;
+use Symfony\Component\Validator\Constraints as Assert;
+use DateTimeImmutable;
 
 class EventBody
 {
+    #[Assert\NotBlank()]
     private ?string $name;
 
-    private ?int $players;
+    private array $players = [];
 
+    #[Assert\NotBlank()]
     private ?int $maxPlayers;
 
+    #[Assert\NotBlank()]
     private ?int $game;
 
-    private ?DateTime $date;
+    #[Assert\NotBlank()]
+    private ?DateTimeImmutable $date;
 
+    #[Assert\NotBlank()]
     private ?AddressBody $Address;
 
 
@@ -30,17 +36,13 @@ class EventBody
     }
 
 
-    public function getPlayers(): ?int
+    public function getPlayers(): ?array
     {
         return $this->players;
     }
-    public function setPlayers(?int $players): self
+    public function setPlayers(?array $playersId): self
     {
-        if (null === $players) {
-            $this->players = 1;
-        }else {
-            $this->players = $players;
-        }
+        $this->players = $playersId;
         return $this;
     }
     
@@ -64,11 +66,11 @@ class EventBody
         return $this;
     }
 
-    public function getDate(): ?DateTime
+    public function getDate(): ?DateTimeImmutable
     {
         return $this->date;
     }
-    public function setDate(?DateTime $date): self
+    public function setDate(?DateTimeImmutable $date): self
     {
         $this->date = $date;
         return $this;

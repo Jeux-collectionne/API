@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Business\AddressBusiness;
 use App\RequestBody\AddressBody;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations\Route;
@@ -12,10 +13,15 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 class AddressController extends AbstractFOSRestController
 {
 
+    public function __construct(private AddressBusiness $addressBusiness)
+    {}
+
     #[Route(path: '', methods: 'GET')]
     public function getAddresses()
     {
-
+        $addresses = $this->addressBusiness->getAddresses();
+        $view = $this->view($addresses);
+        return $this->handleView($view);
     }
 
     #[Route(path: '/{address}', methods: 'GET')]
