@@ -9,13 +9,15 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Bridge\Doctrine\IdGenerator\UuidV4Generator;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 class Event {
 
     #[Groups(["public-event"])]
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: UuidV4Generator::class)]
     #[ORM\Column]
     private ?int $id;
 
