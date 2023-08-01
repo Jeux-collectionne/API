@@ -8,21 +8,21 @@ use DateTimeImmutable;
 class EventBody
 {
     #[Assert\NotBlank()]
-    private ?string $name;
+    private ?string $name = null;
 
     private array $players = [];
 
     #[Assert\NotBlank()]
-    private ?int $maxPlayers;
+    private ?int $maxPlayers = null;
 
     #[Assert\NotBlank()]
-    private ?int $game;
+    private ?int $game = null;
 
     #[Assert\NotBlank()]
-    private ?DateTimeImmutable $date;
+    private ?DateTimeImmutable $date = null;
 
     #[Assert\NotBlank()]
-    private ?AddressBody $Address;
+    private ?AddressBody $Address = null;
 
 
     public function getName(): ?string

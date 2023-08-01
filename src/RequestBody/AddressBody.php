@@ -2,14 +2,19 @@
 
 namespace App\RequestBody;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 class AddressBody
 {
-    private ?string $city;
-
-    private ?int $zipCode;
-
-    private ?string $name;
-
+    #[Assert\NotBlank()]
+    private ?string $city = null;
+    
+    #[Assert\NotBlank()]
+    private ?int $zipCode = null;
+    
+    #[Assert\NotBlank()]
+    private ?string $name = null;
+    
     public function getCity(): ?string
     {
         return $this->city;
