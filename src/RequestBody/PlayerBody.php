@@ -7,104 +7,90 @@ use Symfony\Component\Validator\Constraints as Assert;
 class PlayerBody {
 
     #[Assert\NotBlank()]
-    private string $username;
+    private ?string $username = null;
 
     #[Assert\NotBlank()]
-    private string $password;
+    #[Assert\Length(min: 6)]
+    private ?string $password = null;
 
     #[Assert\NotBlank()]
     #[Assert\Email()]
-    private string $email;
+    private ?string $email = null;
 
     #[Assert\NotBlank()]
-    private string $firstName;
+    private ?string $firstName = null;
     
     #[Assert\NotBlank()]
-    private string $lastName;
+    private ?string $lastName = null;
 
-    #[Assert\NotBlank()]
-    #[Assert\Type('integer')]
-    private ?string $age;
+    private ?string $age = null;
 
-    #[Assert\NotBlank()]
-    private ?string $description;
+    private ?string $description = null;
 
-    /**
-     * @return mixed
-     */
-    public function getUsername(): string
+    public function getUsername(): ?string
     {
         return $this->username;
     }
-
-    /**
-     * @param mixed $username
-     */
-    public function setUsername($username): self
+    public function setUsername(?string $username): self
     {
         $this->username = $username;
         return $this;
     }
 
-
-    public function getPassword()
+    public function getPassword(): ?string
     {
         return $this->password;
     }
-
     public function setPassword($password): self
     {
         $this->password = $password;
         return $this;
     }
 
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
-
-    public function setEmail(string $email): self
+    public function setEmail(?string $email): self
     {
         $this->email = $email;
         return $this;
     }
 
-
-    public function getFirstName(): string
+    public function getFirstName(): ?string
     {
         return $this->firstName;
     }
-
     public function setFirstName(?string $firstName)
     {
         $this->firstName = $firstName;
         return $this;
     }
-    public function getLastName()
+
+    public function getLastName(): ?string
     {
         return $this->lastName;
     }
-
     public function setLastName(?string $lastName): self
     {
         $this->lastName = $lastName;
         return $this;
     }
-    public function getAge()
+
+    public function getAge(): ?int
     {
         return $this->age;
     }
-
     public function setAge(?int $age): self
     {
         $this->age = $age;
         return $this;
     }
-    public function getDescription()
+
+    public function getDescription(): ?string
     {
         return $this->description;
     }
-
     public function setDescription(?string $description): self
     {
         $this->description = $description;

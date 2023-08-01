@@ -5,9 +5,11 @@ namespace App\Controller;
 use App\Business\AddressBusiness;
 use App\Entity\Address;
 use App\RequestBody\AddressBody;
+use Exception;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route(path: '/addresses')]
 class AddressController extends AbstractFOSRestController
@@ -31,15 +33,16 @@ class AddressController extends AbstractFOSRestController
         return $this->handleView($view);
     }
 
-    /**
-     * @todo Ajouter les validators pour voir si tout est conforme, qu'on a toute les infos nécessaires
-     */
-    #[Route(path: '/{address}', methods: 'POST')]
+    #[Route(path: '', methods: 'POST')]
     #[ParamConverter('addressBody', converter: 'fos_rest.request_body')]
-    public function createAddress(Address $address, AddressBody $addressBody)
+    public function createAddress(AddressBody $addressBody, ValidatorInterface $validator)
     {
-        $this->addressBusiness->modifyAddress($addressBody, $address);
-        $view = $this->view();
+        $errors = $validator->validate($addressBody);
+        if (!empty($errors[0])) {
+            throw new Exception(sprintf("%s : %s", $errors[0]->getMessage(), $errors[0]->getPropertyPath()), 1);
+        }
+        $address = $this->addressBusiness->createAddress($addressBody);
+        $view = $this->view($address);
         return $this->handleView($view);
     }
 
@@ -47,8 +50,8 @@ class AddressController extends AbstractFOSRestController
     #[ParamConverter('addressBody', converter: 'fos_rest.request_body')]
     public function modifyAddress(Address $address, AddressBody $addressBody)
     {
-        $this->addressBusiness->modifyAddress($addressBody, $address);
-        $view = $this->view();
+        $address = $this->addressBusiness->modifyAddress($addressBody, $address);
+        $view = $this->view($address);
         return $this->handleView($view);
     }
 

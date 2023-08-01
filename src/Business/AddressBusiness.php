@@ -25,14 +25,16 @@ class AddressBusiness
     /**
      * Modifies the given address with the given infos
      */
-    public function modifyAddress(AddressBody $addressBody, Address $address)
+    public function modifyAddress(AddressBody $addressBody, Address $address): Address
     {
-        !$addressBody->getCity()    ?: $address->setCity($addressBody->getCity());
-        !$addressBody->getZipCode() ?: $address->setZipCode($addressBody->getZipCode());
-        !$addressBody->getName()    ?: $address->setName($addressBody->getName());
+        empty($addressBody->getCity())    ?: $address->setCity($addressBody->getCity());
+        empty($addressBody->getZipCode()) ?: $address->setZipCode($addressBody->getZipCode());
+        empty($addressBody->getName())    ?: $address->setName($addressBody->getName());
 
         $this->em->persist($address);
         $this->em->flush();
+
+        return $address;
     }
 
     /**
@@ -42,5 +44,21 @@ class AddressBusiness
     {
         $this->addressRepository->remove($address);
         $this->em->flush();
+    }
+
+    /**
+     * Creates an address
+     */
+    public function createAddress(AddressBody $addressBody): Address
+    {
+        $address = new Address();
+
+        $address->setCity($addressBody->getCity())
+        ->setZipCode($addressBody->getZipCode())
+        ->setName($addressBody->getName());
+
+        $this->em->persist($address);
+        $this->em->flush();
+        return $address;
     }
 }
