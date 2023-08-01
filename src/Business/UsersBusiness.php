@@ -17,9 +17,6 @@ class UsersBusiness {
         private UserPasswordHasherInterface $pwdInterface
     ){}
 
-    /**
-     * @todo Check si c'est vraiement une addresse mail avec le validator
-     */
     public function addPlayer(PlayerBody $infos)
     {
 
@@ -60,10 +57,19 @@ class UsersBusiness {
         $this->usersRepository->remove($player, true);
     }
 
-    /** @todo */
     public function modifyPlayer(Users $player, PlayerBody $playerBody)
     {
-        $player->setUsername($playerBody->getUsername())
-               ->setLastName($playerBody->getLastName());
+        empty($playerBody->getUsername())   ?: $player->setUsername($playerBody->getUsername());
+        empty($playerBody->getPassword())   ?: $player->setPassword($playerBody->getPassword());
+        empty($playerBody->getEmail())      ?: $player->setEmail($playerBody->getEmail());
+        empty($playerBody->getFirstName())  ?: $player->setFirstName($playerBody->getFirstName());
+        empty($playerBody->getLastName())   ?: $player->setLastName($playerBody->getLastName());
+        empty($playerBody->getAge())        ?: $player->setAge($playerBody->getAge());
+        empty($playerBody->getDescription())?: $player->setDescription($playerBody->getDescription());
+
+        $this->em->persist($player);
+        $this->em->flush();
+
+        return $player;
     }
 }
