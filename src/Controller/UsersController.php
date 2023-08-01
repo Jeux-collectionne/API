@@ -11,6 +11,7 @@ use FOS\RestBundle\Context\Context;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route(path: '/players')]
@@ -18,9 +19,12 @@ class UsersController extends AbstractFOSRestController
 {
     public function __construct(private UsersBusiness $usersBusiness, private CustomHelper $helper){}
 
+    #[IsGranted("ROLE_USER")]
     #[Route(path: '', methods: 'GET')]
     public function getAllUsers()
     {
+        // Pour récup le user
+        // dd($this->getUser());
         $players = $this->usersBusiness->getUsers();
         $view = $this->view($players)->setContext((new Context())->setGroups(['public']));
         return $this->handleView($view);
