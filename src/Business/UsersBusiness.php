@@ -40,6 +40,8 @@ class UsersBusiness {
         $player->setPassword($pwd);
         $this->em->persist($player);
         $this->em->flush();
+
+        return $player;
     }
 
     /** @todo Ajouter une méthode dans le repo pour faire une pagination */
@@ -71,5 +73,17 @@ class UsersBusiness {
         $this->em->flush();
 
         return $player;
+    }
+
+    public function searchPlayer(?string $username): array
+    {
+        $players= [];
+
+        !$username ?: $players = $this->usersRepository->searchPlayerByUsername($username);
+
+        return [
+            'total_items'   => count($players),
+            'players'       => $players
+        ];
     }
 }

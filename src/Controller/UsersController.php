@@ -10,10 +10,10 @@ use Exception;
 use FOS\RestBundle\Context\Context;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
+use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Controller\Annotations\Route;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
-
 #[Route(path: '/players')]
 class UsersController extends AbstractFOSRestController
 {
@@ -30,29 +30,19 @@ class UsersController extends AbstractFOSRestController
         return $this->handleView($view);
     }
 
+    #[Route(path: '/search', methods: 'GET')]
+    public function searchPlayerByUsername(#[MapQueryParameter] string $username)
+    {
+        $player = $this->usersBusiness->searchPlayer($username);
+        $view = $this->view($player);
+        return $this->handleView($view);
+    }
+
     #[Route(path: '/{user}', methods: 'GET')]
     public function getPlayer(Users $user)
     {
         $view = $this->view($user)->setContext((new Context())->setGroups(['public']));
         return $this->handleView($view);
-    }
-
-    /** @todo Faire l'appel à l'helper de token */
-    #[Route(path: '/register', methods: 'POST')]
-    #[ParamConverter('playerBody', converter:"fos_rest.request_body")]
-    public function registerPlayer(PlayerBody $playerBody, ValidatorInterface $validator)
-    {
-        $errors = $validator->validate($playerBody);
-        if (!empty($errors[0])) {
-            throw new Exception(sprintf("%s : %s", $errors[0]->getMessage(), $errors[0]->getPropertyPath()), 1);
-        }
-        $this->usersBusiness->addPlayer($playerBody);
-        
-        $view = $this->view([
-            "token" => "à faire"
-        ]);
-        return $this->handleView($view);
-        
     }
 
     #[Route(path: '/{user}', methods: 'DELETE')]
@@ -71,5 +61,7 @@ class UsersController extends AbstractFOSRestController
         $view = $this->view($player);
         return $this->handleView($view);
     }
+
+
 
 }
