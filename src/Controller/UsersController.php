@@ -10,9 +10,9 @@ use Exception;
 use FOS\RestBundle\Context\Context;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
-use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Controller\Annotations\Route;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route(path: '/players')]
 class UsersController extends AbstractFOSRestController
@@ -31,10 +31,8 @@ class UsersController extends AbstractFOSRestController
     }
 
     #[Route(path: '/search', methods: 'GET')]
-    #[RequestParam(name: "username")]
-    public function searchPlayerByUsername(?string $username)
+    public function searchPlayerByUsername(#[MapQueryParameter] string $username)
     {
-        $username === null ? dd($_GET['username']) : '';
         $player = $this->usersBusiness->searchPlayer($username);
         $view = $this->view($player);
         return $this->handleView($view);
