@@ -29,6 +29,7 @@ class ApiLoginController extends AbstractFOSRestController
         $token = $jwtManager->create($user);
 
         $view = $this->view([
+            "player" => $user,
             "token" => $token
         ]);
         return $this->handleView($view);
@@ -37,11 +38,6 @@ class ApiLoginController extends AbstractFOSRestController
 
     #[Route('/login', name:'app_login', methods:'POST')]
     public function index(#[CurrentUser] ?Users $user)
-    {
-        return $this->json([
-            "code" => 201,
-            "token" => 'à faire'
-        ]);
-    }
+    {}
 
 }

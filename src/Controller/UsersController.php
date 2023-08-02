@@ -19,7 +19,6 @@ class UsersController extends AbstractFOSRestController
 {
     public function __construct(private UsersBusiness $usersBusiness, private CustomHelper $helper){}
 
-    #[IsGranted("ROLE_USER")]
     #[Route(path: '', methods: 'GET')]
     public function getAllUsers()
     {
@@ -45,20 +44,24 @@ class UsersController extends AbstractFOSRestController
         return $this->handleView($view);
     }
 
-    #[Route(path: '/{user}', methods: 'DELETE')]
-    public function deletePlayer(Users $user)
+    #[IsGranted("ROLE_USER")]
+    #[Route(path: '', methods: 'DELETE')]
+    public function deletePlayer()
     {
+        $user = $this->getUser();
         $this->usersBusiness->deletePlayer($user);
         $view = $this->view();
         return $this->handleView($view);
     }
     
-    #[Route(path: '/{user}', methods: 'PUT')]
+    #[IsGranted("ROLE_USER")]
+    #[Route(path: '', methods: 'PUT')]
     #[ParamConverter('playerBody', class: PlayerBody::class, converter: 'fos_rest.request_body')]
-    public function modifyPlayer(Users $user, PlayerBody $playerBody)
+    public function modifyPlayer(PlayerBody $playerBody)
     {
+        $user = $this->getUser();
         $player = $this->usersBusiness->modifyPlayer($user, $playerBody);
-        $view = $this->view($player);
+        $view = $this->view($player)->setContext((new Context)->setGroups(['public']));
         return $this->handleView($view);
     }
 
