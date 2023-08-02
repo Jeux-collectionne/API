@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Business\UsersBusiness;
 use App\Entity\Users;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -39,10 +40,9 @@ class ApiLoginController extends AbstractController
     #[Route('/login', name:'app_login', methods:'POST')]
     public function index(#[CurrentUser] ?Users $user)
     {
-
         return $this->json([
             "code" => 201,
-            "token" => "à faire"
+            "token" => 'à faire'
         ]);
     }
 
