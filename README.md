@@ -10,5 +10,8 @@ Lexik va ainsi générer la paire de clé mais au mauvais endroit. Il va créer 
 
 Mais ce n'est pas tout ! Il faut maintenant décrypter la clé privée, parce qu'elle ne l'est pas automatiquement.
 Pour ce faire, il faudra créer un fichier, dans le dossier jwt créé juste au dessus, nommé **private_decrypted.pem**. Ensuite sur Linux et Mac il faut, dans le terminal et à la racine du projet, taper cette commande:<br>
-```openssl rsa -in private.pem -out private_decrypted.pem```<br>
+```
+openssl rsa -in private.pem -out private_decrypted.pem
+```
+
 Ce qui va décrypter la clé et mettre le résultat dans **private_decrypted.pem**. On peut ensuite mettre la clé décryptée dans le fichier **private.pem**.
