@@ -30,7 +30,7 @@ class EventController extends AbstractFOSRestController
     #[Route(path: '/{event}', methods: 'GET')]
     public function getEvent(Event $event)
     {
-        dd($event);
+        dd($this->getUser());
     }
 
     #[Route(path: '/{player}', methods: 'POST')]
@@ -51,7 +51,7 @@ class EventController extends AbstractFOSRestController
     
     #[Route(path: '/{event}', methods: 'PUT')]
     public function modifyEvent(Event $event){
-        dd($event);
+        dd($this->getUser());
     }
     
     #[Route(path: '/leave/{event}/{player}', methods: 'PUT')]

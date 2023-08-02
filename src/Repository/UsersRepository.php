@@ -40,6 +40,20 @@ class UsersRepository extends ServiceEntityRepository
         }
     }
 
+    public function searchPlayerByUsername(string $username)
+    {
+        $qb = $this->createQueryBuilder('u')
+            ->select('
+                u.id,
+                u.username
+                ')
+            ->setParameter('u.username', $username)
+            ->where('u.username LIKE %:username%');
+
+        $query = $qb->getQuery();
+        return $query->getResult();
+    }
+
 //    /**
 //     * @return Players[] Returns an array of Players objects
 //     */
