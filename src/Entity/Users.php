@@ -55,8 +55,8 @@ class Users implements PasswordAuthenticatedUserInterface, UserInterface
     private ?Address $Address;
 
     #[Groups(['public', 'private'])]
-    #[ORM\ManyToMany(targetEntity: Game::class)]
-    private ?Collection $games;
+    #[ORM\OneToMany(targetEntity: GameList::class, mappedBy: 'user')]
+    private ?Collection $lists;
 
     /**
      * The public representation of the user (e.g. a username, an email address, etc.)
@@ -189,25 +189,25 @@ class Users implements PasswordAuthenticatedUserInterface, UserInterface
         return $this;
     }
 
-    public function getGames(): Collection
+    public function getLists(): Collection
     {
-        return $this->games;
+        return $this->lists;
     }
 
-    public function setGames(array $games): self
+    public function setLists(array $lists): self
     {
-        $this->games->clear();
-        if ($games !== null) {
-            foreach ($games as $game) {
-                $this->games->add($game);
+        $this->lists->clear();
+        if ($lists !== null) {
+            foreach ($lists as $list) {
+                $this->lists->add($list);
             }
         }
         return $this;
     }
 
-    public function addGame(Game $game): self
+    public function addlist(GameList $list): self
     {
-        $this->games->add($game);
+        $this->lists->add($list);
         return $this;
     }
     

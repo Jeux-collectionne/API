@@ -11,7 +11,6 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
-/** @todo Faire l'appel au business pour les réponses */
 #[Route(path: '/events', name: 'event_controller')]
 class EventController extends AbstractFOSRestController
 {

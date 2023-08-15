@@ -2,27 +2,27 @@
 
 namespace App\Repository;
 
-use App\Entity\Game;
+use App\Entity\ListElement;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Game>
+ * @extends ServiceEntityRepository<ListElement>
  *
- * @method Game|null find($id, $lockMode = null, $lockVersion = null)
- * @method Game|null findOneBy(array $criteria, array $orderBy = null)
- * @method Game[]    findAll()
- * @method Game[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method ListElement|null find($id, $lockMode = null, $lockVersion = null)
+ * @method ListElement|null findOneBy(array $criteria, array $orderBy = null)
+ * @method ListElement[]    findAll()
+ * @method ListElement[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class GameRepository extends ServiceEntityRepository
+class ListElementRepository extends ServiceEntityRepository
 {
     
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Game::class);
+        parent::__construct($registry, ListElement::class);
     }
 
-    public function save(Game $entity, bool $flush = false): void
+    public function save(ListElement $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -31,7 +31,7 @@ class GameRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Game $entity, bool $flush = false): void
+    public function remove(ListElement $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -41,7 +41,7 @@ class GameRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return Players[] Returns an array of Players objects
+//     * @return ListElement[] Returns an array of ListElement objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -55,7 +55,7 @@ class GameRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Players
+//    public function findOneBySomeField($value): ?ListElement
 //    {
 //        return $this->createQueryBuilder('p')
 //            ->andWhere('p.exampleField = :val')
