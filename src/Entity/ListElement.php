@@ -7,6 +7,9 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
+/** @todo Pas besoin de controller ni de business (peut-être une business). Tout intégrer à la business de GameList
+ * -> à la création d'un game list, dans le request body, récup le tableau d'id de jeux et boucler dessus pour créer des éléments
+ */
 #[ORM\Entity(repositoryClass: ListElementRepository::class)]
 class ListElement
 {
@@ -15,7 +18,6 @@ class ListElement
     #[ORM\Column]
     private ?int $id = null;
 
-    /** @todo Check les OneToMany etc ici et dans Users -> ne pas oublier de faire les migrations */
     #[ORM\ManyToOne(targetEntity: GameList::class, inversedBy:'id')]
     private GameList $gameList;
 
@@ -50,11 +52,6 @@ class ListElement
     public function setGameId(?int $gameId): self
     {
         $this->gameId = $gameId;
-        return $this;
-    }
-    public function addGameId(int $gameId): self
-    {
-        $this->gameId[] = $gameId;
         return $this;
     }
 }

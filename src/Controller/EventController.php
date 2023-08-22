@@ -11,6 +11,7 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
+/** @todo revoir tout le truc en prenant le user dans le token au lieu de celui dans l'url */
 #[Route(path: '/events', name: 'event_controller')]
 class EventController extends AbstractFOSRestController
 {

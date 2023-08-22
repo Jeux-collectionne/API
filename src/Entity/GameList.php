@@ -18,7 +18,9 @@ class GameList
     #[ORM\Column]
     private ?int $id = null;
 
-    /** @todo Check les OneToMany etc ici et dans Users -> ne pas oublier de faire les migrations */
+    #[Groups(['public', 'private'])]
+    private ?int $userId;
+
     #[Groups(['public', 'private'])]
     #[ORM\ManyToOne(targetEntity: ListType::class, inversedBy:'list')]
     private ListType $type;
@@ -44,6 +46,12 @@ class GameList
         return $this;
     }
 
+    public function getUserId(): ?int
+    {
+        $this->userId = $this->user->getId();
+        return $this->userId;
+    }
+
     public function getType(): ?ListType
     {
         return $this->type;
@@ -67,5 +75,18 @@ class GameList
     public function getGames(): ?Collection
     {
         return $this->games;
+    }
+    /**
+     * @param ListElement[] $games
+     */
+    public function addGames(array $games)
+    {
+        foreach ($games as $game) {
+            if ($game instanceof ListElement) {
+                $this->games->add($game);
+            }else {
+                throw new \Exception('Must be of type ListElement::class');
+            }
+        }
     }
 }
