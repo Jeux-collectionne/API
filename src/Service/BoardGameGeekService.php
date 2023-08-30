@@ -35,4 +35,24 @@ class BoardGameGeekService {
         
         return $result;
     }
+
+    public function getGamesById(array $ids): array
+    {
+        $url = $this->apiUrl . '/thing?id=' . implode(',', $ids);
+        try {
+            $response = $this->client->request(
+                'GET',
+                $url
+            );
+            $content = $response->getContent();
+            $xml = new SimpleXMLElement($content);
+
+            // Convertir le XML en tableau récursif
+            $result = json_decode(json_encode($xml), true);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+        
+        return $result;
+    }
 }

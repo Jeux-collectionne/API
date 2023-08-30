@@ -41,7 +41,6 @@ class GameListController extends AbstractFOSRestController
         $view = $this->view($gameLists)->setContext((new Context())->setGroups(['public']));
         return $this->handleView($view);
     }
-
     
     #[Route(path: '/{gameList}', methods: 'GET')]
     public function getGameList(GameList $gameList)
