@@ -18,7 +18,7 @@ class GameListBusiness
 
     public function getGamesData(array $gamesId): array
     {
-        
+        // todo
         $result = $this->bggService->getGamesById($gamesId);
         $gamesInfo = [];
         foreach ($result['item'] as $item) {
@@ -31,6 +31,7 @@ class GameListBusiness
                     }
                 }
                 $gamesInfo[$item['@attributes']['id']] = [
+                    'id'                => $item['@attributes']['id'] ?? null,
                     'name'              => $name,
                     'year_published'    => $item['yearpublished']['@attributes']['value'],
                     'img'               => $item['image'],
@@ -87,7 +88,14 @@ class GameListBusiness
     public function getPlayerGameListsType(Users $player, string $type)
     {
         $result = [];
-        $result = $this->gameListRepository->getPlayerGameListOfType($player, $type);
+        $lists = $this->gameListRepository->getPlayerGameListOfType($player, $type);
+        foreach ($lists as $list) {
+            foreach ($list->getGames() as $game) {
+                $gamesId[] = $game->getId();
+            }
+        }
+        $gamesData = $this->getGamesData($gamesId);
+        $result = $this->buildLists($lists, $gamesData);
         return $result;
     }
 
